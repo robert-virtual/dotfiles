@@ -1,7 +1,7 @@
 bindkey -s ^s "tmux-sessionizer\n"
 
 function fd {
-    directory_to_go=$(find ~/Documents ~/Documents/**/ /var/www/**/ -mindepth 1 -maxdepth 1 -type d | fzf)
+    directory_to_go=$(find ~/Documents ~/Documents/** /var/www/** -mindepth 1 -maxdepth 1 -type d | fzf)
     
     if [ -z $directory_to_go ]; then
         return
