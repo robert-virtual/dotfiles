@@ -1,43 +1,3 @@
--- Mappings.
--- See `:help vim.diagnostic.*` for documentation on any of the below functions
--- Telescope
-require('lualine').setup{
-  options = {
-    icons_enabled = false,
-    component_separators = { left = ' ', right = ' '},
-    section_separators = { left = ' ', right = ' '},
-  },
-  sections = {
-    lualine_a = {'mode'},
-    lualine_b = {'branch', 'diff', 'diagnostics'},
-    lualine_c = {'filename'},
-    lualine_x = {'filetype'},
-    lualine_y = {},
-    lualine_z = {}
-  },
-  inactive_sections = {
-    lualine_a = {},
-    lualine_b = {},
-    lualine_c = {'filename'},
-    lualine_x = {'location'},
-    lualine_y = {},
-    lualine_z = {}
-  },
-  tabline = {},
-  extensions = {}
-}
-require('telescope').setup{
-    defaults = {
-        prompt_prefix = "$ ",
-    }
-}
-require('telescope').load_extension('fzf')
-require("telescope").load_extension "file_browser"
-
-
-
-
-
 local opts = { noremap=true, silent=true }
 vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, opts)
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
@@ -72,36 +32,40 @@ end
 
 -- Add additional capabilities supported by nvim-cmp
 local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 local lspconfig = require('lspconfig')
+lspconfig['cssls'].setup{
+  capabilities = capabilities,
+}
+lspconfig['html'].setup{
+  capabilities = capabilities,
+}
+
+capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+
+lspconfig['emmet_ls'].setup {
+  on_attach = on_attach,
+  capabilities = capabilities,
+  filetypes = { 'php','html','typescriptreact', 'javascriptreact'},
+  flags = {
+      debounce_text_changes = 150,
+  }
+}
+lspconfig['intelephense'].setup{
+}
 
 -- Use a loop to conveniently call 'setup' on multiple servers and
 -- map buffer local keybindings when the language server attaches
--- 
---
---
-local servers = { 'pyright', 'tsserver','intelephense','html','cssls','emmet_ls','dockerls'}
+local servers = { 'svelte','gopls','pyright', 'tsserver','phpactor','dockerls','prismals','tailwindcss','clangd'}
 for _, lsp in pairs(servers) do
-    if lsp == 'emmet_ls' then
-        lspconfig[lsp].setup ({
-            on_attach = on_attach,
-            capabilities,
-            filetypes = { 'html', 'typescriptreact', 'javascriptreact', 'css', 'sass', 'scss', 'less'},
-            flags = {
-                debounce_text_changes = 150,
-            }
-        })
-    else
         lspconfig[lsp].setup {
             on_attach = on_attach,
-            capabilities,
+            capabilities = capabilities,
             flags = {
             -- This will be the default in neovim 0.7+
             debounce_text_changes = 150,
             }
         }
-    end
 end
 
 -- luasnip setup
@@ -122,26 +86,27 @@ cmp.setup {
     ['<CR>'] = cmp.mapping.confirm {
       behavior = cmp.ConfirmBehavior.Replace,
       select = true,
-    },
-    ['<Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_next_item()
-      elseif luasnip.expand_or_jumpable() then
-        luasnip.expand_or_jump()
-      else
-        fallback()
-      end
-    end, { 'i', 's' }),
-    ['<S-Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_prev_item()
-      elseif luasnip.jumpable(-1) then
-        luasnip.jump(-1)
-      else
-        fallback()
-      end
-    end, { 'i', 's' }),
-  }),
+    }
+    -- ,
+    -- ['<Tab>'] = cmp.mapping(function(fallback)
+    --   if cmp.visible() then
+    --     cmp.select_next_item()
+    --   elseif luasnip.expand_or_jumpable() then
+    --     luasnip.expand_or_jump()
+    --   else
+    --     fallback()
+    --   end
+    -- end, { 'i', 's' }),
+    -- ['<S-Tab>'] = cmp.mapping(function(fallback)
+    --   if cmp.visible() then
+    --     cmp.select_prev_item()
+    --   elseif luasnip.jumpable(-1) then
+    --     luasnip.jump(-1)
+    --   else
+    --     fallback()
+    --   end
+    -- end, { 'i', 's' }),
+ }),
   sources = {
     { name = 'nvim_lsp' },
     { name = 'luasnip' },
