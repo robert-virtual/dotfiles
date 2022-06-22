@@ -41,6 +41,11 @@ Plug 'lewis6991/gitsigns.nvim'
 " GIT
 
 " Show colors like this: #0984e3
+Plug 'kevinhwang91/promise-async'
+Plug 'kevinhwang91/nvim-ufo'
+" Show colors
+
+" Show colors like this: #0984e3
 Plug 'norcalli/nvim-colorizer.lua'
 " Show colors
 

@@ -10,3 +10,6 @@ require'colorizer'.setup()
 require'nvim-web-devicons'.setup {
  default = true;
 }
+vim.wo.foldcolumn = '1'
+vim.wo.foldlevel = 99
+vim.wo.foldenable = true
