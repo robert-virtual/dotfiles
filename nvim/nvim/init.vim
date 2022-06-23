@@ -40,14 +40,21 @@ Plug 'L3MON4D3/LuaSnip' "Snippets plugin
 Plug 'lewis6991/gitsigns.nvim'
 " GIT
 
-" Show colors like this: #0984e3
+" 
 Plug 'kevinhwang91/promise-async'
 Plug 'kevinhwang91/nvim-ufo'
-" Show colors
+" 
 
 " Show colors like this: #0984e3
 Plug 'norcalli/nvim-colorizer.lua'
 " Show colors
+
+" 
+Plug 'numToStr/Comment.nvim'
+" 
+" 
+Plug 'glepnir/dashboard-nvim'
+" 
 
 " coc
 " Plug 'neoclide/coc.nvim', {'branch': 'release'}
